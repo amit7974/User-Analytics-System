@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "User Analytics + Semantic Search API",
+    "description": "Postman collection for the Spring Boot User Analytics backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" }
+  ],
+  "item": [
+    {
+      "name": "Track Event",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"user001\",\n  \"event\": \"user viewed pricing page\",\n  \"metadata\": { \"page\": \"/pricing\" },\n  \"timestamp\": \"2026-01-01T12:00:00\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/track", "host": ["{{baseUrl}}"], "path": ["track"] }
+      }
+    },
+    {
+      "name": "Get Analytics (no filters)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/analytics", "host": ["{{baseUrl}}"], "path": ["analytics"] }
+      }
+    },
+    {
+      "name": "Get Analytics (event filter)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/analytics?event=login",
+          "host": ["{{baseUrl}}"], "path": ["analytics"],
+          "query": [{ "key": "event", "value": "login" }]
+        }
+      }
+    },
+    {
+      "name": "Get Analytics (date range)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/analytics?from=2026-01-01&to=2026-01-31",
+          "host": ["{{baseUrl}}"], "path": ["analytics"],
+          "query": [
+            { "key": "from", "value": "2026-01-01" },
+            { "key": "to", "value": "2026-01-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Semantic Search",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/search?query=user visited pricing&topK=5",
+          "host": ["{{baseUrl}}"], "path": ["search"],
+          "query": [
+            { "key": "query", "value": "user visited pricing" },
+            { "key": "topK", "value": "5" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Similar Users",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/similar-users?userId=user001&topK=5",
+          "host": ["{{baseUrl}}"], "path": ["similar-users"],
+          "query": [
+            { "key": "userId", "value": "user001" },
+            { "key": "topK", "value": "5" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/actuator/health", "host": ["{{baseUrl}}"], "path": ["actuator", "health"] }
+      }
+    }
+  ]
+}
